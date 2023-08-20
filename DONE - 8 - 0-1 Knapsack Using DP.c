@@ -26,6 +26,31 @@ void sort(int *profit, int *weights, int n){
     }
 }
 
+//Function to find the objects that are selected
+void findObjects(int *weights, int **knapTable, int maxWeight, int n){
+    int i, j;
+    int obj[n];
+
+    for(i=0; i<n; i++)
+        obj[i] = -1;
+
+    i=n;
+    j=maxWeight;
+    while(i>=0 && j>=0){
+        if(knapTable[i][j]!=knapTable[i-1][j]){
+            obj[i-2] = 1;
+            j -= weights[i-2];
+        }
+        i -= 1;
+    }
+    printf("\n");
+    for(i=0; i<n; i++){
+        if(obj[i]!=-1){
+            printf("Object #%d is selected!\n", i+1);
+        }
+    }
+}
+
 //Actual program implementing the knapsack problem
 int knapSack(int W, int *weights, int *profit, int n){
     int **knapTable;
@@ -51,6 +76,10 @@ int knapSack(int W, int *weights, int *profit, int n){
             }
         }
     }
+
+    //Calling the function to print all the objects selected
+    findObjects(weights, knapTable, W, n);
+
     return knapTable[n][W];  //return the last cell of the last row as that's the answer
 }
 
